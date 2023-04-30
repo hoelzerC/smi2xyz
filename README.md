@@ -3,6 +3,7 @@
 SMILES2XYZ is a Python library that allows SMILES strings to be converted into 3D structures (XYZ files). These can then be used in various applications, e.g. for molecular representations or simulations.
 
 # Overview
+```
 smi2xyz/
 │
 ├── smi2xyz/
@@ -18,7 +19,7 @@ smi2xyz/
 ├── environment.yaml
 ├── LICENSE
 └── README.md
-
+```
 
 ## Setup
 
@@ -40,4 +41,4 @@ xyz = Converter.smiles_to_xyz(smiles)
 
 ## LICENSE
 
-SMILES2XYZ is licensed under the MIT license. For more information, see the LICENSE file.
+SMILES2XYZ is licensed under the GNU GPLv3  license. For more information, see the LICENSE file.
