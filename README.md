@@ -20,15 +20,9 @@ smi2xyz/
 └── README.md
 
 
-## Installation
+## Setup
 
-The installation can be done with pip:
-
-```pip install smi2xyz```
-
-
-
-Alternatively, you can create a conda environment with the following command:
+You can create a conda environment specific for this project with the following command:
 
 ```conda env create -f environment.yml```
 
