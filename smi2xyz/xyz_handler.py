@@ -13,7 +13,7 @@ class XYZ_Handler:
         NOTE: All output is given in a.u.
     """
 
-    def read_xyz(fp: str) -> tuple[Tensor, Tensor]:
+    def read_xyz(self, fp: str) -> tuple[Tensor, Tensor]:
         """Reads an xyz file and returns a tuple of two tensors.
 
         Parameters
@@ -51,7 +51,7 @@ class XYZ_Handler:
                     )
         return torch.tensor(data), torch.tensor([charge])
 
-    def write_xyz(fp: str, data: Tensor, comment: str = None) -> None:
+    def write_xyz(self, fp: str, data: Tensor, comment: str = None) -> None:
         """Writes a Tensor to an xyz file.
 
         Parameters
@@ -75,8 +75,7 @@ class XYZ_Handler:
 
             # write the atomic symbols and positions
             for d in data:
+                # write the atomic symbols and positions
                 f.write(
-                    "{} {:.6f} {:.6f} {:.6f}\n".format(
-                        PSE[d[0].item()], d[1] / AA2AU, d[2] / AA2AU, d[3] / AA2AU
-                    )
+                    f"{PSE[d[0].item()]:2s} {d[1]:12.7f} {d[2]:12.7f} {d[3]:12.7f}\n"
                 )
