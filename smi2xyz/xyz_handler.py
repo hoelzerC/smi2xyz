@@ -1,16 +1,14 @@
 import torch
+from .constants import ATOMIC_NUMBER, PSE, AA2AU
 
 Tensor = torch.tensor
 
-from .constants import ATOMIC_NUMBER, PSE, AA2AU
-
-
 class XYZ_Handler:
     """
-        A class for reading and writing xyz files.
-        For the xyt format specification see https://en.wikipedia.org/wiki/XYZ_file_format
+    A class for reading and writing xyz files.
+    For the xyz format specification see https://en.wikipedia.org/wiki/XYZ_file_format
 
-        NOTE: All output is given in a.u.
+    NOTE: All output is given in a.u. XYZ files are always in Angstrom.
     """
 
     def read_xyz(self, fp: str) -> tuple[Tensor, Tensor]:
@@ -32,10 +30,10 @@ class XYZ_Handler:
         """
         data, charge = [], 0
 
-        with open(fp, "r") as file:
+        with open(fp, "r", encoding="UTF-8") as file:
             for line_number, line in enumerate(file):
                 if line_number == 0:
-                    num_atoms = int(line)
+                    pass
                 elif line_number == 1:
                     if "charge=" in line:
                         charge = int(line.split("=")[1])
@@ -60,13 +58,13 @@ class XYZ_Handler:
             The file path to write the data to.
         data : Tensor
             The input Tensor of shape (N, 4), where N is the number of atoms in the molecule.
-            The columns of the Tensor should be in the order: atomic number, x coordinate, y 
+            The columns of the Tensor should be in the order: atomic number, x coordinate, y
             coordinate, and z coordinate.
         comment : str, optional
             A comment to include in the header of the xyz file, by default None
         """
 
-        with open(fp, "w") as f:
+        with open(fp, "w", encoding="UTF-8") as f:
             # write the number of atoms as the first line
             f.write(f"{data.shape[0]}\n")
 
@@ -77,5 +75,5 @@ class XYZ_Handler:
             for d in data:
                 # write the atomic symbols and positions
                 f.write(
-                    f"{PSE[d[0].item()]:2s} {d[1]:12.7f} {d[2]:12.7f} {d[3]:12.7f}\n"
+                    f"{PSE[d[0].item()]:2s} {( d[1]/AA2AU ):12.7f} {( d[2]/AA2AU ):12.7f} {( d[3]/AA2AU ):12.7f}\n"
                 )
