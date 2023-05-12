@@ -3,6 +3,7 @@ from .constants import ATOMIC_NUMBER, PSE, AA2AU
 
 Tensor = torch.tensor
 
+
 class XYZ_Handler:
     """
     A class for reading and writing xyz files.

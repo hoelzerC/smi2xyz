@@ -113,7 +113,7 @@ class Converter:
             out2D = tmpdir + "/2D.sdf"
             out3D = tmpdir + "/3D.xyz"
 
-            with open(outSMI, "w",encoding="UTF-8") as file:
+            with open(outSMI, "w", encoding="UTF-8") as file:
                 file.write(smiles)
 
             # convert SMILES to 2D using obabel
