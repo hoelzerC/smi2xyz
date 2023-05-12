@@ -5,6 +5,7 @@ import subprocess
 import tempfile
 import torch
 
+from .constants import AA2AU
 from .xyz_handler import XYZ_Handler
 
 Tensor = torch.tensor
@@ -64,9 +65,9 @@ class Converter:
             [
                 (
                     mol.GetAtomWithIdx(i).GetAtomicNum(),
-                    mol.GetConformer().GetAtomPosition(i).x,
-                    mol.GetConformer().GetAtomPosition(i).y,
-                    mol.GetConformer().GetAtomPosition(i).z,
+                    mol.GetConformer().GetAtomPosition(i).x * AA2AU,
+                    mol.GetConformer().GetAtomPosition(i).y * AA2AU,
+                    mol.GetConformer().GetAtomPosition(i).z * AA2AU,
                 )
                 for i in range(mol.GetNumAtoms())
             ]
@@ -112,7 +113,7 @@ class Converter:
             out2D = tmpdir + "/2D.sdf"
             out3D = tmpdir + "/3D.xyz"
 
-            with open(outSMI, "w") as file:
+            with open(outSMI, "w",encoding="UTF-8") as file:
                 file.write(smiles)
 
             # convert SMILES to 2D using obabel
@@ -145,5 +146,5 @@ class Converter:
                 raise IOError(f"Optimization for {outSMI} failed. Exit.")
 
             # read output
-            xyz, chrg = XYZ_Handler.read_xyz(out3D)
+            xyz, chrg = XYZ_Handler().read_xyz(fp=out3D)
         return xyz

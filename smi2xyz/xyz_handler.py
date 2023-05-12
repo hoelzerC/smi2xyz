@@ -1,19 +1,17 @@
 import torch
+from .constants import ATOMIC_NUMBER, PSE, AA2AU
 
 Tensor = torch.tensor
 
-from .constants import ATOMIC_NUMBER, PSE, AA2AU
-
-
 class XYZ_Handler:
     """
-        A class for reading and writing xyz files.
-        For the xyt format specification see https://en.wikipedia.org/wiki/XYZ_file_format
+    A class for reading and writing xyz files.
+    For the xyz format specification see https://en.wikipedia.org/wiki/XYZ_file_format
 
-        NOTE: All output is given in a.u.
+    NOTE: All output is given in a.u. XYZ files are always in Angstrom.
     """
 
-    def read_xyz(fp: str) -> tuple[Tensor, Tensor]:
+    def read_xyz(self, fp: str) -> tuple[Tensor, Tensor]:
         """Reads an xyz file and returns a tuple of two tensors.
 
         Parameters
@@ -32,10 +30,11 @@ class XYZ_Handler:
         """
         data, charge = [], 0
 
-        with open(fp, "r") as file:
+        with open(fp, "r", encoding="UTF-8") as file:
             for line_number, line in enumerate(file):
                 if line_number == 0:
-                    num_atoms = int(line)
+                    # number of atoms not required
+                    pass
                 elif line_number == 1:
                     if "charge=" in line:
                         charge = int(line.split("=")[1])
@@ -51,7 +50,7 @@ class XYZ_Handler:
                     )
         return torch.tensor(data), torch.tensor([charge])
 
-    def write_xyz(fp: str, data: Tensor, comment: str = None) -> None:
+    def write_xyz(self, fp: str, data: Tensor, comment: str = "") -> None:
         """Writes a Tensor to an xyz file.
 
         Parameters
@@ -60,13 +59,13 @@ class XYZ_Handler:
             The file path to write the data to.
         data : Tensor
             The input Tensor of shape (N, 4), where N is the number of atoms in the molecule.
-            The columns of the Tensor should be in the order: atomic number, x coordinate, y 
+            The columns of the Tensor should be in the order: atomic number, x coordinate, y
             coordinate, and z coordinate.
         comment : str, optional
-            A comment to include in the header of the xyz file, by default None
+            A comment to include in the header of the xyz file, by default ""
         """
 
-        with open(fp, "w") as f:
+        with open(fp, "w", encoding="UTF-8") as f:
             # write the number of atoms as the first line
             f.write(f"{data.shape[0]}\n")
 
@@ -76,7 +75,5 @@ class XYZ_Handler:
             # write the atomic symbols and positions
             for d in data:
                 f.write(
-                    "{} {:.6f} {:.6f} {:.6f}\n".format(
-                        PSE[d[0].item()], d[1] / AA2AU, d[2] / AA2AU, d[3] / AA2AU
-                    )
+                    f"{PSE[d[0].item()]:2s} {( d[1]/AA2AU ):12.7f} {( d[2]/AA2AU ):12.7f} {( d[3]/AA2AU ):12.7f}\n"
                 )
