@@ -146,5 +146,5 @@ class Converter:
                 raise IOError(f"Optimization for {outSMI} failed. Exit.")
 
             # read output
-            xyz, chrg = XYZ_Handler.read_xyz(self=None, fp=out3D)
+            xyz, chrg = XYZ_Handler().read_xyz(fp=out3D)
         return xyz

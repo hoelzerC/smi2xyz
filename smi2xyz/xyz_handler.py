@@ -33,6 +33,7 @@ class XYZ_Handler:
         with open(fp, "r", encoding="UTF-8") as file:
             for line_number, line in enumerate(file):
                 if line_number == 0:
+                    # number of atoms not required
                     pass
                 elif line_number == 1:
                     if "charge=" in line:
@@ -49,7 +50,7 @@ class XYZ_Handler:
                     )
         return torch.tensor(data), torch.tensor([charge])
 
-    def write_xyz(self, fp: str, data: Tensor, comment: str = None) -> None:
+    def write_xyz(self, fp: str, data: Tensor, comment: str = "") -> None:
         """Writes a Tensor to an xyz file.
 
         Parameters
@@ -61,7 +62,7 @@ class XYZ_Handler:
             The columns of the Tensor should be in the order: atomic number, x coordinate, y
             coordinate, and z coordinate.
         comment : str, optional
-            A comment to include in the header of the xyz file, by default None
+            A comment to include in the header of the xyz file, by default ""
         """
 
         with open(fp, "w", encoding="UTF-8") as f:
@@ -73,7 +74,6 @@ class XYZ_Handler:
 
             # write the atomic symbols and positions
             for d in data:
-                # write the atomic symbols and positions
                 f.write(
                     f"{PSE[d[0].item()]:2s} {( d[1]/AA2AU ):12.7f} {( d[2]/AA2AU ):12.7f} {( d[3]/AA2AU ):12.7f}\n"
                 )
