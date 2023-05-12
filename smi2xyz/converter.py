@@ -113,7 +113,7 @@ class Converter:
             out2D = tmpdir + "/2D.sdf"
             out3D = tmpdir + "/3D.xyz"
 
-            with open(outSMI, "w",encoding="UTF-8") as file:
+            with open(outSMI, "w", encoding="UTF-8") as file:
                 file.write(smiles)
 
             # convert SMILES to 2D using obabel
@@ -146,5 +146,5 @@ class Converter:
                 raise IOError(f"Optimization for {outSMI} failed. Exit.")
 
             # read output
-            xyz, chrg = XYZ_Handler.read_xyz(self=None, fp=out3D)
+            xyz, chrg = XYZ_Handler().read_xyz(fp=out3D)
         return xyz
